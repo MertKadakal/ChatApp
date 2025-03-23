@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026622202895",
+    "project_id": "chatapp-bcaa7",
+    "storage_bucket": "chatapp-bcaa7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026622202895:android:26811e136e75d20d3f6f7a",
+        "android_client_info": {
+          "package_name": "mert.kadakal.chatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTyRvWmDXOJ6vQfYcODxr_0jriHiEF-4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
