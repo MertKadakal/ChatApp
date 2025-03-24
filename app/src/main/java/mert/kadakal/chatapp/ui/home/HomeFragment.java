@@ -2,10 +2,8 @@ package mert.kadakal.chatapp.ui.home;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,37 +16,27 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import mert.kadakal.chatapp.MainActivity;
-import mert.kadakal.chatapp.R;
+import mert.kadakal.chatapp.MessageAdapter;
 import mert.kadakal.chatapp.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
     private ArrayList<String> dataList;
-    private ArrayAdapter<String> adapter;
+    private MessageAdapter adapter;
     private Button mesaj;
-    private String prs = "a";
     private TextView oda;
+    private TextView oda_yok;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +50,14 @@ public class HomeFragment extends Fragment {
         dataList = new ArrayList<>();
         mesaj = binding.mesajYaz;
         oda = binding.oda;
+        adapter = new MessageAdapter(requireContext(), dataList, sharedPreferences);
+        oda_yok = binding.odaYok;
+
+        if (sharedPreferences.getString("oda", "").equals("")) {
+            mesaj.setVisibility(View.INVISIBLE);
+            oda_yok.setVisibility(View.VISIBLE);
+        }
+
 
         String odaId = sharedPreferences.getString("oda", "");
         if (!odaId.isEmpty()) {
@@ -98,77 +94,39 @@ public class HomeFragment extends Fragment {
                     adapter.notifyDataSetChanged(); // Listeyi güncelle
                 });
 
-        // Özelleştirilmiş ArrayAdapter sayesinde mesajların görüntülenmesi
-        adapter = new ArrayAdapter<String>(requireContext(), android.R.layout.simple_list_item_1, dataList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-
-                // Veriyi al
-                String content = getItem(position);
-
-                // Split işlemi ile content'i ikiye ayırıyoruz
-                String[] parts = content.split("<prs>");
-
-                // Eğer split başarılı olduysa ve iki parça varsa
-                if (parts.length > 1) {
-                    String person = parts[1]; // İlk kısmı person olarak al
-                    String message = String.valueOf(Html.fromHtml("---" + person+"<br>"+parts[2]));
-
-                    // TextView'leri tanımla
-                    TextView textView = (TextView) view.findViewById(android.R.id.text1);
-
-                    // Eğer "a" ise sağa yasla
-                    if (person.equals(sharedPreferences.getString("hesap", ""))) {
-                        // Sağa yasla
-                        textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                    } else {
-                        // Sola yasla
-                        textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                    }
-
-                    // Mesajı yerleştir
-                    textView.setText(message);
-                }
-
-                return view;
-            }
-        };
 
         listView.setAdapter(adapter);
 
-        mesaj.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Bilgi Girin");
-
-                // EditText ekleyerek kullanıcının veri girmesini sağla
-                final EditText input = new EditText(getContext());
-                builder.setView(input);
-
-                builder.setPositiveButton("Tamam", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String userInput = input.getText().toString();
-
-                        // Yeni mesaj verisi
-                        String oda = sharedPreferences.getString("oda", ""); // Varsayılan değer: "Varsayılan Ad"
-                        String konum = sharedPreferences.getString("hesap", ""); // Varsayılan değer: 0
-
-                        Map<String, Object> message = new HashMap<>();
-                        message.put("content", oda + "<prs>" + konum + "<prs>" + userInput);
-                        message.put("timestamp", System.currentTimeMillis()); // Zaman damgası ekleniyor
-
-                        // Firestore'a ekle
-                        db.collection("messages").add(message);
-                    }
-                });
-
-
-                builder.setNegativeButton("İptal", null);
-                builder.show();
+        mesaj.setOnClickListener(v -> {
+            if (sharedPreferences.getString("oda", "").equals("")) {
+                Toast.makeText(getContext(), "Bir odaya giriş yapmalısınız", Toast.LENGTH_SHORT).show();
+                return;
             }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Mesaj Girin");
+
+            // EditText ekleyerek kullanıcının veri girmesini sağla
+            final EditText input = new EditText(getContext());
+            builder.setView(input);
+
+            builder.setPositiveButton("Gönder", (dialog, which) -> {
+                String userInput = input.getText().toString();
+
+                // Yeni mesaj verisi
+                String oda = sharedPreferences.getString("oda", ""); // Varsayılan değer: "Varsayılan Ad"
+                String konum = sharedPreferences.getString("hesap", ""); // Varsayılan değer: 0
+
+                Map<String, Object> message = new HashMap<>();
+                message.put("content", oda + "<prs>" + konum + "<prs>" + userInput);
+                message.put("timestamp", System.currentTimeMillis()); // Zaman damgası ekleniyor
+
+                // Firestore'a ekle
+                db.collection("messages").add(message);
+            });
+
+
+            builder.setNegativeButton("İptal", null);
+            builder.show();
         });
 
         return root;
