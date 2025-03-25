@@ -25,4 +25,4 @@ Kullanıcılar bir odaya girmek ve o odada mesajlaşma gerçekleştirmek için b
 
 Topluluk platformunun altyapısı, verilerin güvenli bir şekilde bulutta tutulması ve kullanıcılar arası veri alışverişi Firebase aracılığıyla yapılmaktadır.
 
-Topluluk sekmesinde oluşturulan kullanıcı hesapları, şifreler ve mesajlar yalnızca uygulama üreticisi tarafından kontrol edilip düzenlenebilir. Lütfen mesajlaşırken saygı kurallarına uyunuz.
+Kullanıcı hesapları, şifreler ve mesajlar yalnızca uygulama üreticisi tarafından kontrol edilip düzenlenebilir. Lütfen mesajlaşırken saygı kurallarına uyunuz.
