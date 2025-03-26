@@ -23,6 +23,6 @@ Kullanıcılar bir odaya girmek ve o odada mesajlaşma gerçekleştirmek için b
 
 ## Firebase Kullanımı ve Topluluk Özellikleri
 
-Topluluk platformunun altyapısı, verilerin güvenli bir şekilde bulutta tutulması ve kullanıcılar arası veri alışverişi Firebase aracılığıyla yapılmaktadır.
+Uygulama altyapısı, verilerin güvenli bir şekilde bulutta tutulması ve kullanıcılar arası veri alışverişi Firebase aracılığıyla yapılmaktadır.
 
 Kullanıcı hesapları, şifreler ve mesajlar yalnızca uygulama üreticisi tarafından kontrol edilip düzenlenebilir. Lütfen mesajlaşırken saygı kurallarına uyunuz.
