@@ -55,6 +55,10 @@ public class DashboardFragment extends Fragment {
                 Toast.makeText(getContext(), "Mevcut odadan çıkmalısınız", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (sharedPreferences.getString("hesap","").equals("")) {
+                Toast.makeText(getContext(), "Bir hesaba giriş yapmalısınız", Toast.LENGTH_SHORT).show();
+                return;
+            }
             
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setTitle("Oda İsmi Girin");
@@ -101,12 +105,24 @@ public class DashboardFragment extends Fragment {
                                                 String odaId = documentReference.getId();
 
                                                 odaya_gir.setText("Odadan Çık");
+                                                Toast.makeText(getContext(), "Oda oluşturuldu", Toast.LENGTH_SHORT).show();
 
                                                 // SharedPreferences'a kaydet
                                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                                 editor.putString("oda", odaId);
                                                 editor.putString("konum", sharedPreferences.getString("hesap", ""));
                                                 editor.apply();
+
+                                                // Yeni mesaj verisi
+                                                String oda1 = sharedPreferences.getString("oda", ""); // Varsayılan değer: "Varsayılan Ad"
+                                                String konum = "Sistem"; // Varsayılan değer: 0
+
+                                                Map<String, Object> message = new HashMap<>();
+                                                message.put("content", oda1 + "<prs>" + konum + "<prs>" + userInput +  " adlı oda oluşturuldu");
+                                                message.put("timestamp", System.currentTimeMillis()); // Zaman damgası ekleniyor
+
+                                                // Firestore'a ekle
+                                                db.collection("messages").add(message);
                                             });
 
                                 });

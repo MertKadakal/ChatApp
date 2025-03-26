@@ -44,6 +44,9 @@ public class MessageAdapter extends ArrayAdapter<String> {
             if (person.equals(sharedPreferences.getString("hesap", ""))) {
                 messager_isim.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                 messager_message.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+            } else if (person.equals("Sistem")) {
+                messager_isim.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                messager_message.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             } else {
                 messager_isim.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
                 messager_message.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
