@@ -91,6 +91,8 @@ public class HomeFragment extends Fragment {
                         }
                     }
 
+                    Log.d("amount", String.valueOf(dataList.size()));
+
                     adapter.notifyDataSetChanged(); // Listeyi güncelle
                 });
 

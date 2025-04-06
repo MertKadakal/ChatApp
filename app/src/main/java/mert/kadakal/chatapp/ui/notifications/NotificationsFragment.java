@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Source;
 
 import org.w3c.dom.Text;
 
@@ -47,6 +50,19 @@ public class NotificationsFragment extends Fragment {
         hesap_ismi = binding.hesapIsmi;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        CollectionReference koleksiyon = db.collection("hesaplar");
+
+        koleksiyon.get(Source.SERVER).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String isim = document.getString("isim");
+                    Log.d("Firestore", "İsim: " + isim);
+                }
+            } else {
+                Log.e("Firestore", "Hata: ", task.getException());
+            }
+        });
 
         giris_yap.setText("Çıkış Yap");
         if (sharedPreferences.getString("hesap","").equals("")) {

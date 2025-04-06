@@ -11,15 +11,17 @@
 
     <ListView
         android:id="@+id/list_home"
-        android:layout_width="386dp"
-        android:layout_height="467dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="150dp"
         android:divider="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
+        app:layout_constraintVertical_bias="0.497" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/mesaj_yaz"
@@ -34,9 +36,11 @@
         android:text="Yeni Mesaj"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_home" />
+        app:layout_constraintTop_toBottomOf="@+id/list_home"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/oda"
